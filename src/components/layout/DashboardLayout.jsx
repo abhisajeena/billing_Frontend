@@ -1,24 +1,35 @@
+import { useState } from "react";
+
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
 const DashboardLayout = ({ children }) => {
-  return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      {/* Fixed Sidebar */}
-      <Sidebar />
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-      {/* Main Application Area */}
-      <div className="min-h-screen lg:ml-64">
+  return (
+    <div className="min-h-screen bg-slate-50">
+
+      {/* Sidebar */}
+      <Sidebar
+        mobileOpen={mobileOpen}
+        setMobileOpen={setMobileOpen}
+      />
+
+      {/* Main Content */}
+      <div className="min-h-screen lg:pl-64">
+
         {/* Navbar */}
-        <Navbar />
+        <Navbar
+          setMobileOpen={setMobileOpen}
+        />
 
         {/* Page Content */}
-        <main className="px-4 py-6 sm:px-6 lg:px-8">
-          <div className="mx-auto w-full max-w-[1600px]">
-            {children}
-          </div>
+        <main className="w-full p-4 sm:p-6 lg:p-8">
+          {children}
         </main>
+
       </div>
+
     </div>
   );
 };
