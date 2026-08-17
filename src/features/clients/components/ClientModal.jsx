@@ -1,15 +1,21 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { X } from "lucide-react";
+
 import Button from "../../../components/common/Button";
 import toast from "react-hot-toast";
 
-const ClientModal = ({ isOpen, onClose, onSave, client = null }) => {
+const ClientModal = ({
+    isOpen,
+    onClose,
+    onSave,
+    client = null,
+}) => {
     const {
         register,
         handleSubmit,
         formState: { errors },
-        reset
+        reset,
     } = useForm();
 
     useEffect(() => {
@@ -22,7 +28,7 @@ const ClientModal = ({ isOpen, onClose, onSave, client = null }) => {
                 address: client.address || "",
                 city: client.city || "",
                 state: client.state || "",
-                pincode: client.pincode || ""
+                pincode: client.pincode || "",
             });
         } else {
             reset({
@@ -33,7 +39,7 @@ const ClientModal = ({ isOpen, onClose, onSave, client = null }) => {
                 address: "",
                 city: "",
                 state: "",
-                pincode: ""
+                pincode: "",
             });
         }
     }, [client, reset, isOpen]);
@@ -43,168 +49,331 @@ const ClientModal = ({ isOpen, onClose, onSave, client = null }) => {
     const onSubmitForm = async (data) => {
         try {
             await onSave(data);
+
             reset();
+
             onClose();
         } catch (error) {
-            toast.error(error.response?.data?.message || error.message || "Failed to save client");
+            toast.error(
+                error.response?.data?.message ||
+                    error.message ||
+                    "Failed to save client"
+            );
         }
     };
 
     return (
-        <div className="fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl border border-slate-100 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/40 p-3 backdrop-blur-sm sm:items-center sm:p-4">
+
+            <div className="my-3 flex max-h-[calc(100vh-24px)] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-2xl sm:my-0 sm:max-h-[90vh]">
+
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-                    <h3 className="text-lg font-bold text-slate-800">
-                        {client ? "Edit Client Profile" : "Register New Client"}
+                <div className="flex shrink-0 items-center justify-between border-b border-slate-100 px-4 py-4 sm:px-6">
+
+                    <h3 className="min-w-0 truncate text-base font-bold text-slate-800 sm:text-lg">
+                        {client
+                            ? "Edit Client Profile"
+                            : "Register New Client"}
                     </h3>
-                    <button 
+
+                    <button
+                        type="button"
                         onClick={onClose}
-                        className="text-slate-400 hover:text-slate-650 p-1 hover:bg-slate-50 rounded-lg transition"
+                        className="ml-3 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-50 hover:text-slate-700"
                     >
                         <X size={18} />
                     </button>
+
                 </div>
 
-                {/* Form Body */}
-                <form onSubmit={handleSubmit(onSubmitForm)} className="p-6 space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Scrollable Form Body */}
+                <form
+                    onSubmit={handleSubmit(
+                        onSubmitForm
+                    )}
+                    className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6"
+                >
+
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+                        {/* Client Name */}
                         <div className="sm:col-span-2">
-                            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+
+                            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
                                 Client Name *
                             </label>
+
                             <input
                                 type="text"
-                                className={`w-full h-11 px-3.5 rounded-xl bg-slate-50 border text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all ${
-                                    errors.clientName ? "border-red-400 focus:ring-red-400" : "border-slate-200"
-                                }`}
+                                className={`
+                                    h-11
+                                    w-full
+                                    rounded-xl
+                                    border
+                                    bg-slate-50
+                                    px-3.5
+                                    text-sm
+                                    text-slate-800
+                                    outline-none
+                                    transition
+                                    focus:bg-white
+                                    focus:ring-2
+                                    focus:ring-indigo-500
+
+                                    ${
+                                        errors.clientName
+                                            ? "border-red-400 focus:ring-red-400"
+                                            : "border-slate-200"
+                                    }
+                                `}
                                 placeholder="E.g. Acme Corp"
-                                {...register("clientName", { required: "Client name is required" })}
+                                {...register(
+                                    "clientName",
+                                    {
+                                        required:
+                                            "Client name is required",
+                                    }
+                                )}
                             />
+
                             {errors.clientName && (
-                                <p className="text-xs text-red-500 mt-1">{errors.clientName.message}</p>
+                                <p className="mt-1 text-xs text-red-500">
+                                    {
+                                        errors
+                                            .clientName
+                                            .message
+                                    }
+                                </p>
                             )}
+
                         </div>
 
+                        {/* Phone */}
                         <div>
-                            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+
+                            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
                                 Contact Number *
                             </label>
+
                             <input
                                 type="text"
-                                className={`w-full h-11 px-3.5 rounded-xl bg-slate-50 border text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all ${
-                                    errors.phone ? "border-red-400 focus:ring-red-400" : "border-slate-200"
-                                }`}
-                                placeholder="E.g. +91 9876543210"
-                                {...register("phone", { 
-                                    required: "Phone number is required",
-                                    pattern: {
-                                        value: /^[+]?[0-9\s-]{7,15}$/,
-                                        message: "Invalid phone number"
+                                className={`
+                                    h-11
+                                    w-full
+                                    rounded-xl
+                                    border
+                                    bg-slate-50
+                                    px-3.5
+                                    text-sm
+                                    text-slate-800
+                                    outline-none
+                                    transition
+                                    focus:bg-white
+                                    focus:ring-2
+                                    focus:ring-indigo-500
+
+                                    ${
+                                        errors.phone
+                                            ? "border-red-400 focus:ring-red-400"
+                                            : "border-slate-200"
                                     }
-                                })}
+                                `}
+                                placeholder="E.g. +91 9876543210"
+                                {...register(
+                                    "phone",
+                                    {
+                                        required:
+                                            "Phone number is required",
+                                        pattern: {
+                                            value: /^[+]?[0-9\s-]{7,15}$/,
+                                            message:
+                                                "Invalid phone number",
+                                        },
+                                    }
+                                )}
                             />
+
                             {errors.phone && (
-                                <p className="text-xs text-red-500 mt-1">{errors.phone.message}</p>
+                                <p className="mt-1 text-xs text-red-500">
+                                    {
+                                        errors.phone
+                                            .message
+                                    }
+                                </p>
                             )}
+
                         </div>
 
+                        {/* Email */}
                         <div>
-                            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+
+                            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
                                 Email Address
                             </label>
+
                             <input
                                 type="email"
-                                className="w-full h-11 px-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+                                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none transition focus:bg-white focus:ring-2 focus:ring-indigo-500"
                                 placeholder="client@domain.com"
                                 {...register("email")}
                             />
+
                         </div>
 
+                        {/* GSTIN */}
                         <div className="sm:col-span-2">
-                            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+
+                            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
                                 GST Identification Number (GSTIN)
                             </label>
+
                             <input
                                 type="text"
-                                className="w-full h-11 px-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all uppercase"
+                                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm uppercase text-slate-800 outline-none transition focus:bg-white focus:ring-2 focus:ring-indigo-500"
                                 placeholder="E.g. 27AAAAA1111A1Z1"
-                                {...register("gstNumber")}
+                                {...register(
+                                    "gstNumber"
+                                )}
                             />
+
                         </div>
 
+                        {/* Address */}
                         <div className="sm:col-span-2">
-                            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+
+                            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
                                 Billing Address *
                             </label>
+
                             <textarea
-                                className={`w-full py-2.5 px-3.5 rounded-xl bg-slate-50 border text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all min-h-[70px] ${
-                                    errors.address ? "border-red-400 focus:ring-red-400" : "border-slate-200"
-                                }`}
+                                className={`
+                                    min-h-[80px]
+                                    w-full
+                                    resize-y
+                                    rounded-xl
+                                    border
+                                    bg-slate-50
+                                    px-3.5
+                                    py-2.5
+                                    text-sm
+                                    text-slate-800
+                                    outline-none
+                                    transition
+                                    focus:bg-white
+                                    focus:ring-2
+                                    focus:ring-indigo-500
+
+                                    ${
+                                        errors.address
+                                            ? "border-red-400 focus:ring-red-400"
+                                            : "border-slate-200"
+                                    }
+                                `}
                                 placeholder="Street address, building, suite..."
-                                {...register("address", { required: "Address is required" })}
+                                {...register(
+                                    "address",
+                                    {
+                                        required:
+                                            "Address is required",
+                                    }
+                                )}
                             />
+
                             {errors.address && (
-                                <p className="text-xs text-red-500 mt-1">{errors.address.message}</p>
+                                <p className="mt-1 text-xs text-red-500">
+                                    {
+                                        errors
+                                            .address
+                                            .message
+                                    }
+                                </p>
                             )}
+
                         </div>
 
+                        {/* City */}
                         <div>
-                            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+
+                            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
                                 City
                             </label>
+
                             <input
                                 type="text"
-                                className="w-full h-11 px-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+                                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none transition focus:bg-white focus:ring-2 focus:ring-indigo-500"
                                 placeholder="E.g. Mumbai"
                                 {...register("city")}
                             />
+
                         </div>
 
-                        <div>
-                            <div className="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
-                                        State
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="w-full h-11 px-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
-                                        placeholder="MH"
-                                        {...register("state")}
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
-                                        Pincode
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="w-full h-11 px-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
-                                        placeholder="400001"
-                                        {...register("pincode")}
-                                    />
-                                </div>
+                        {/* State + Pincode */}
+                        <div className="grid grid-cols-2 gap-2">
+
+                            <div>
+
+                                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                    State
+                                </label>
+
+                                <input
+                                    type="text"
+                                    className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none transition focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                                    placeholder="MH"
+                                    {...register("state")}
+                                />
+
                             </div>
+
+                            <div>
+
+                                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                    Pincode
+                                </label>
+
+                                <input
+                                    type="text"
+                                    inputMode="numeric"
+                                    className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none transition focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                                    placeholder="400001"
+                                    {...register(
+                                        "pincode"
+                                    )}
+                                />
+
+                            </div>
+
                         </div>
+
                     </div>
 
-                    <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                    {/* Actions */}
+                    <div className="mt-6 flex flex-col-reverse gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-end">
+
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-650 rounded-xl text-sm font-semibold transition"
+                            className="h-11 w-full rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 sm:w-auto"
                         >
                             Cancel
                         </button>
-                        <div className="w-32">
-                            <Button type="submit" variant="primary">
+
+                        <div className="w-full sm:w-36">
+                            <Button
+                                type="submit"
+                                variant="primary"
+                                fullWidth
+                            >
                                 Save Profile
                             </Button>
                         </div>
+
                     </div>
+
                 </form>
+
             </div>
+
         </div>
     );
 };

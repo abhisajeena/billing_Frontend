@@ -1,10 +1,10 @@
 import {
-  LayoutDashboard,
-  ReceiptText,
-  Users,
-  Building2,
-  LogOut,
-  X,
+    LayoutDashboard,
+    ReceiptText,
+    Users,
+    Building2,
+    LogOut,
+    X,
 } from "lucide-react";
 
 import { NavLink, useNavigate } from "react-router-dom";
@@ -13,201 +13,215 @@ import useAuthStore from "../../features/auth/store/auth.store";
 import toast from "react-hot-toast";
 
 const menus = [
-  {
-    name: "Dashboard",
-    path: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    name: "Invoices",
-    path: "/bills",
-    icon: ReceiptText,
-  },
-  {
-    name: "Customers",
-    path: "/clients",
-    icon: Users,
-  },
-  {
-    name: "Company Profile",
-    path: "/company",
-    icon: Building2,
-  },
+    {
+        name: "Dashboard",
+        path: "/dashboard",
+        icon: LayoutDashboard,
+    },
+    {
+        name: "Invoices",
+        path: "/bills",
+        icon: ReceiptText,
+    },
+    {
+        name: "Customers",
+        path: "/clients",
+        icon: Users,
+    },
+    {
+        name: "Company Profile",
+        path: "/company",
+        icon: Building2,
+    },
 ];
 
 const Sidebar = ({ mobileOpen, setMobileOpen }) => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const { user, logout } = useAuthStore();
+    const { user, logout } = useAuthStore();
 
-  const handleLogout = () => {
-    logout();
+    const handleLogout = () => {
+        logout();
 
-    toast.success("Logged out successfully");
+        toast.success("Logged out successfully");
 
-    navigate("/");
-  };
+        navigate("/");
+    };
 
-  const getInitials = (name) => {
-    if (!name) return "A";
+    const getInitials = (name) => {
+        if (!name) return "A";
 
-    return name
-      .split(" ")
-      .map((item) => item[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
+        return name
+            .split(" ")
+            .map((item) => item[0])
+            .join("")
+            .toUpperCase()
+            .slice(0, 2);
+    };
 
-  return (
-    <>
-      {/* Mobile Overlay */}
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
-          onClick={() => setMobileOpen(false)}
-        />
-      )}
+    return (
+        <>
+            {/* Mobile Overlay */}
+            {mobileOpen && (
+                <div
+                    className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+                    onClick={() => setMobileOpen(false)}
+                />
+            )}
 
-      <aside
-        className={`
-          fixed inset-y-0 left-0 z-50
-          flex w-64 flex-col
-          bg-[#070b1a] text-slate-300
-          transition-transform duration-300 ease-in-out
+            {/* Sidebar */}
+            <aside
+                className={`
+                    fixed inset-y-0 left-0 z-50
+                    flex w-64 flex-col
+                    bg-[#070b1a] text-slate-300
+                    transition-transform duration-300 ease-in-out
+                    lg:translate-x-0
 
-          ${
-            mobileOpen
-              ? "translate-x-0"
-              : "-translate-x-full"
-          }
+                    ${
+                        mobileOpen
+                            ? "translate-x-0"
+                            : "-translate-x-full"
+                    }
+                `}
+            >
 
-          lg:translate-x-0
-        `}
-      >
-        {/* Brand */}
-        <div className="flex h-20 shrink-0 items-center justify-between border-b border-white/10 px-6">
-          
-          <div className="flex items-center gap-3">
+                {/* Brand */}
+                <div className="flex h-20 shrink-0 items-center justify-between border-b border-white/10 px-6">
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-lg font-bold text-white shadow-lg shadow-indigo-600/20">
-              B
-            </div>
+                    <div className="flex items-center gap-3">
 
-            <div>
-              <h1 className="text-sm font-bold tracking-wide text-white">
-                BILLING ERP
-              </h1>
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-lg font-bold text-white shadow-lg shadow-indigo-600/20">
+                            B
+                        </div>
 
-              <p className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">
-                Management System
-              </p>
-            </div>
+                        <div>
 
-          </div>
+                            <h1 className="text-sm font-bold tracking-wide text-white">
+                                BILLING ERP
+                            </h1>
 
-          {/* Mobile Close Button */}
-          <button
-            type="button"
-            onClick={() => setMobileOpen(false)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/10 hover:text-white lg:hidden"
-          >
-            <X size={20} />
-          </button>
+                            <p className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">
+                                Management System
+                            </p>
 
-        </div>
+                        </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto px-4 py-7">
+                    </div>
 
-          <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-            Main Menu
-          </p>
+                    {/* Mobile Close */}
+                    <button
+                        type="button"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/10 hover:text-white lg:hidden"
+                    >
+                        <X size={20} />
+                    </button>
 
-          <div className="space-y-1">
+                </div>
 
-            {menus.map((item) => {
-              const Icon = item.icon;
+                {/* Navigation */}
+                <nav className="flex-1 overflow-y-auto px-4 py-7">
 
-              return (
-                <NavLink
-                  key={item.name}
-                  to={item.path}
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) =>
-                    [
-                      "group flex items-center gap-3 rounded-xl px-3.5 py-3",
-                      "text-sm font-medium transition-all duration-200",
+                    <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                        Main Menu
+                    </p>
 
-                      isActive
-                        ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/30"
-                        : "text-slate-400 hover:bg-white/5 hover:text-white",
-                    ].join(" ")
-                  }
-                >
-                  {({ isActive }) => (
-                    <>
-                      <Icon
-                        size={18}
-                        strokeWidth={isActive ? 2.2 : 1.8}
-                        className={
-                          isActive
-                            ? "text-white"
-                            : "text-slate-500 group-hover:text-slate-300"
-                        }
-                      />
+                    <div className="space-y-1">
 
-                      <span>{item.name}</span>
-                    </>
-                  )}
-                </NavLink>
-              );
-            })}
+                        {menus.map((item) => {
+                            const Icon = item.icon;
 
-          </div>
+                            return (
+                                <NavLink
+                                    key={item.name}
+                                    to={item.path}
+                                    onClick={() =>
+                                        setMobileOpen(false)
+                                    }
+                                    className={({ isActive }) =>
+                                        [
+                                            "group flex items-center gap-3 rounded-xl px-3.5 py-3",
+                                            "text-sm font-medium transition-all duration-200",
 
-        </nav>
+                                            isActive
+                                                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/30"
+                                                : "text-slate-400 hover:bg-white/5 hover:text-white",
+                                        ].join(" ")
+                                    }
+                                >
+                                    {({ isActive }) => (
+                                        <>
+                                            <Icon
+                                                size={18}
+                                                strokeWidth={
+                                                    isActive
+                                                        ? 2.2
+                                                        : 1.8
+                                                }
+                                                className={
+                                                    isActive
+                                                        ? "text-white"
+                                                        : "text-slate-500 group-hover:text-slate-300"
+                                                }
+                                            />
 
-        {/* Bottom */}
-        <div className="shrink-0 border-t border-white/10 p-4">
+                                            <span>
+                                                {item.name}
+                                            </span>
+                                        </>
+                                    )}
+                                </NavLink>
+                            );
+                        })}
 
-          {/* User */}
-          <div className="mb-3 flex items-center gap-3 rounded-xl bg-white/[0.04] p-3">
+                    </div>
 
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-indigo-500/20 bg-indigo-500/10 text-sm font-bold text-indigo-400">
-              {getInitials(user?.name)}
-            </div>
+                </nav>
 
-            <div className="min-w-0">
+                {/* Bottom */}
+                <div className="shrink-0 border-t border-white/10 p-4">
 
-              <p className="truncate text-sm font-semibold text-white">
-                {user?.name || "Administrator"}
-              </p>
+                    {/* User */}
+                    <div className="mb-3 flex items-center gap-3 rounded-xl bg-white/[0.04] p-3">
 
-              <p className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-slate-500">
-                Active Session
-              </p>
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-indigo-500/20 bg-indigo-500/10 text-sm font-bold text-indigo-400">
+                            {getInitials(user?.name)}
+                        </div>
 
-            </div>
+                        <div className="min-w-0">
 
-          </div>
+                            <p className="truncate text-sm font-semibold text-white">
+                                {user?.name || "Administrator"}
+                            </p>
 
-          {/* Logout */}
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-slate-400 transition hover:bg-red-500/10 hover:text-red-400"
-          >
-            <LogOut size={18} strokeWidth={1.8} />
+                            <p className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-slate-500">
+                                Active Session
+                            </p>
 
-            <span>Logout</span>
-          </button>
+                        </div>
 
-        </div>
+                    </div>
 
-      </aside>
-    </>
-  );
+                    {/* Logout */}
+                    <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-slate-400 transition hover:bg-red-500/10 hover:text-red-400"
+                    >
+                        <LogOut
+                            size={18}
+                            strokeWidth={1.8}
+                        />
+
+                        <span>Logout</span>
+                    </button>
+
+                </div>
+
+            </aside>
+        </>
+    );
 };
 
 export default Sidebar;
